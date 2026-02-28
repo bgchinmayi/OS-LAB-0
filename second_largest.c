@@ -1,33 +1,30 @@
 #include <stdio.h>
-#include <limits.h>
 
 int main() {
-    int n, i;
+    int n, i, largest, second;
 
     printf("Enter number of elements: ");
     scanf("%d", &n);
 
-    int arr[n];
+    int a[n];
+
     printf("Enter elements:\n");
-    for(i = 0; i < n; i++) {
-        scanf("%d", &arr[i]);
-    }
+    for(i = 0; i < n; i++)
+        scanf("%d", &a[i]);
 
-    int largest = INT_MIN, secondLargest = INT_MIN;
+    largest = second = a[0];
 
-    for(i = 0; i < n; i++) {
-        if(arr[i] > largest) {
-            secondLargest = largest;
-            largest = arr[i];
-        } else if(arr[i] > secondLargest && arr[i] != largest) {
-            secondLargest = arr[i];
+    for(i = 1; i < n; i++) {
+        if(a[i] > largest) {
+            second = largest;
+            largest = a[i];
+        }
+        else if(a[i] > second && a[i] != largest) {
+            second = a[i];
         }
     }
 
-    if(secondLargest == INT_MIN)
-        printf("No second largest element.\n");
-    else
-        printf("Second largest element = %d\n", secondLargest);
+    printf("Second largest = %d", second);
 
     return 0;
 }
