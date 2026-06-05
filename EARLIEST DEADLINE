@@ -1,0 +1,101 @@
+#include <stdio.h>
+
+#define MAX 10
+
+int main()
+{
+    int n;
+
+    int execution[MAX];
+    int period[MAX];
+    int deadline[MAX];
+
+    int remaining[MAX];
+    int current_deadline[MAX];
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for(int i = 0; i < n; i++)
+    {
+        printf("\nProcess P%d\n", i + 1);
+
+        printf("Enter Execution Time: ");
+        scanf("%d", &execution[i]);
+
+        printf("Enter Period: ");
+        scanf("%d", &period[i]);
+
+        printf("Enter Deadline: ");
+        scanf("%d", &deadline[i]);
+
+        remaining[i] = execution[i];
+        current_deadline[i] = deadline[i];
+    }
+
+    printf("\nEDF Scheduling Table\n\n");
+
+    printf("Time\tReady Queue\t\tRunning\n");
+
+    int last = -1;
+
+    for(int time = 0; time < 100; time++)
+    {
+        
+        for(int i = 0; i < n; i++)
+        {
+            if(time != 0 && time % period[i] == 0)
+            {
+                remaining[i] = execution[i];
+                current_deadline[i] = time + deadline[i];
+            }
+        }
+
+        int selected = -1;
+
+        for(int i = 0; i < n; i++)
+        {
+            if(remaining[i] > 0)
+            {
+                if(selected == -1 ||
+                   current_deadline[i] < current_deadline[selected])
+                {
+                    selected = i;
+                }
+            }
+        }
+
+        
+        if(selected != last)
+        {
+            printf("%d\t", time);
+
+            for(int i = 0; i < n; i++)
+            {
+                if(remaining[i] > 0)
+                {
+                    printf("P%d(%d) ",
+                           i + 1,
+                           current_deadline[i]);
+                }
+            }
+
+            printf("\t\t");
+
+           
+            if(selected != -1)
+                printf("P%d\n", selected + 1);
+            else
+                printf("Idle\n");
+
+            last = selected;
+        }
+
+        if(selected != -1)
+        {
+            remaining[selected]--;
+        }
+    }
+
+    return 0;
+}
